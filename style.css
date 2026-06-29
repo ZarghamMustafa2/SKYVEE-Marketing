@@ -1623,6 +1623,15 @@ ul {
         grid-template-columns: 1fr;
     }
 
+    .feed-grid {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .social-feed-section {
+        padding: 20px;
+    }
+
     .ambient-glow,
     .floating-orb {
         display: none !important;

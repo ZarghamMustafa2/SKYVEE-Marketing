@@ -1566,7 +1566,7 @@ ul {
         grid-template-columns: 1fr;
     }
 
-    .metrics-stack {
+    .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
         display: grid;
         position: relative;
@@ -1619,7 +1619,7 @@ ul {
     .pricing-grid,
     .flex-split,
     .brand-grid,
-    .metrics-stack {
+    .metrics-grid {
         grid-template-columns: 1fr;
     }
 

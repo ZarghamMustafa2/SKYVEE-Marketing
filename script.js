@@ -93,20 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
        2. Header Glassmorphism Scroll Effect
        ======================================================== */
     const header = document.querySelector('.glass-header');
+    let isScrolled = false;
 
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.padding = '0';
-            header.style.width = '100%';
-            header.style.top = '0';
-            header.style.borderRadius = '0 0 var(--radius-lg) var(--radius-lg)';
-            header.style.background = 'rgba(255, 255, 255, 0.85)';
-        } else {
-            header.style.padding = '';
-            header.style.width = 'calc(100% - 40px)';
-            header.style.top = '15px';
-            header.style.borderRadius = 'var(--radius-xl)';
-            header.style.background = 'var(--glass-bg)';
+        const scrolled = window.scrollY > 50;
+        if (scrolled !== isScrolled) {
+            isScrolled = scrolled;
+            if (scrolled) {
+                header.style.padding = '0';
+                header.style.width = '100%';
+                header.style.top = '0';
+                header.style.borderRadius = '0 0 var(--radius-lg) var(--radius-lg)';
+                header.style.background = 'rgba(255, 255, 255, 0.85)';
+            } else {
+                header.style.padding = '';
+                header.style.width = 'calc(100% - 40px)';
+                header.style.top = '15px';
+                header.style.borderRadius = 'var(--radius-xl)';
+                header.style.background = 'var(--glass-bg)';
+            }
         }
     });
 
@@ -138,26 +143,28 @@ document.addEventListener('DOMContentLoaded', () => {
        ======================================================== */
     const cards3D = document.querySelectorAll('.3d-card');
 
-    cards3D.forEach(card => {
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left; // x position within the element.
-            const y = e.clientY - rect.top;  // y position within the element.
+    if (window.matchMedia('(hover: hover)').matches) {
+        cards3D.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element.
+                const y = e.clientY - rect.top;  // y position within the element.
 
-            // Calculate rotation (max 15 degrees)
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+                // Calculate rotation (max 15 degrees)
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
 
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
         });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        });
-    });
+    }
 
 
     /* ========================================================

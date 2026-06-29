@@ -110,6 +110,7 @@ ul {
     z-index: -1;
     pointer-events: none;
     animation: drift 15s infinite alternate ease-in-out;
+    will-change: transform;
 }
 
 .glow-1 {
@@ -408,6 +409,7 @@ ul {
     filter: blur(40px);
     opacity: 0.6;
     animation: float 6s infinite ease-in-out;
+    will-change: transform;
 }
 
 .orb-purple {
@@ -1619,6 +1621,11 @@ ul {
     .brand-grid,
     .metrics-stack {
         grid-template-columns: 1fr;
+    }
+
+    .ambient-glow,
+    .floating-orb {
+        display: none !important;
     }
 }
 

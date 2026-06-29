@@ -311,8 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
        ======================================================== */
     const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
     
-    // Check for saved theme preference, otherwise use system preference
-    const savedTheme = localStorage.getItem('theme');
+    // Safe Storage helper to avoid security block crashes (e.g. private tabs)
+    const getSavedTheme = () => {
+        try {
+            return localStorage.getItem('theme');
+        } catch (e) {
+            return null;
+        }
+    };
+    
+    const setSavedTheme = (theme) => {
+        try {
+            localStorage.setItem('theme', theme);
+        } catch (e) {}
+    };
+
+    const savedTheme = getSavedTheme();
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
     
@@ -321,12 +335,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggleIcons(initialTheme);
     
     themeToggleBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
             document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            setSavedTheme(newTheme);
             updateThemeToggleIcons(newTheme);
         });
     });
@@ -334,10 +349,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateThemeToggleIcons(theme) {
         themeToggleBtns.forEach(btn => {
             const icon = btn.querySelector('i');
-            if (theme === 'dark') {
-                icon.className = 'fa-solid fa-sun';
-            } else {
-                icon.className = 'fa-solid fa-moon';
+            if (icon) {
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-sun';
+                } else {
+                    icon.className = 'fa-solid fa-moon';
+                }
             }
         });
     }

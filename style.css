@@ -51,7 +51,8 @@
     --feed-section-bg: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
 }
 
-[data-theme="dark"] {
+:root[data-theme="dark"],
+body[data-theme="dark"] {
     --bg-color: #050B14;
     --surface-color: #0A1128;
     --navy-dark: #F3F4F6;

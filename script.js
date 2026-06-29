@@ -5,6 +5,53 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ========================================================
+       Theme Initializer (Run first to prevent flash and failures)
+       ======================================================== */
+    const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
+    
+    const getSavedTheme = () => {
+        try { return localStorage.getItem('theme'); } catch (e) { return null; }
+    };
+    
+    const setSavedTheme = (theme) => {
+        try { localStorage.setItem('theme', theme); } catch (e) {}
+    };
+
+    const updateThemeToggleIcons = (theme) => {
+        themeToggleBtns.forEach(btn => {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-sun';
+                } else {
+                    icon.className = 'fa-solid fa-moon';
+                }
+            }
+        });
+    };
+
+    const savedTheme = getSavedTheme();
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    
+    document.documentElement.setAttribute('data-theme', initialTheme);
+    document.body.setAttribute('data-theme', initialTheme);
+    updateThemeToggleIcons(initialTheme);
+    
+    themeToggleBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            document.body.setAttribute('data-theme', newTheme);
+            setSavedTheme(newTheme);
+            updateThemeToggleIcons(newTheme);
+        });
+    });
+
+    /* ========================================================
        0. Mobile Menu Toggle
        ======================================================== */
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
@@ -303,59 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     uploadText.style.color = '';
                 }, 4000);
             }, 3000);
-        });
-    }
-
-    /* ========================================================
-       6. Light/Dark Theme Toggle
-       ======================================================== */
-    const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
-    
-    // Safe Storage helper to avoid security block crashes (e.g. private tabs)
-    const getSavedTheme = () => {
-        try {
-            return localStorage.getItem('theme');
-        } catch (e) {
-            return null;
-        }
-    };
-    
-    const setSavedTheme = (theme) => {
-        try {
-            localStorage.setItem('theme', theme);
-        } catch (e) {}
-    };
-
-    const savedTheme = getSavedTheme();
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-    
-    // Apply initial theme
-    document.documentElement.setAttribute('data-theme', initialTheme);
-    updateThemeToggleIcons(initialTheme);
-    
-    themeToggleBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            setSavedTheme(newTheme);
-            updateThemeToggleIcons(newTheme);
-        });
-    });
-    
-    function updateThemeToggleIcons(theme) {
-        themeToggleBtns.forEach(btn => {
-            const icon = btn.querySelector('i');
-            if (icon) {
-                if (theme === 'dark') {
-                    icon.className = 'fa-solid fa-sun';
-                } else {
-                    icon.className = 'fa-solid fa-moon';
-                }
-            }
         });
     }
 
